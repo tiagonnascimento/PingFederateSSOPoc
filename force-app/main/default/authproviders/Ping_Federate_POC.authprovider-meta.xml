@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuthProvider xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customMetadataTypeRecord>PingFederateAuthConfig__mdt.Ping_Federate_POC</customMetadataTypeRecord>
+    <executionUser>tnascimento@telefonica.b2cva.com.devcontfs2</executionUser>
+    <friendlyName>Ping Federate POC</friendlyName>
+    <includeOrgIdInIdentifier>false</includeOrgIdInIdentifier>
+    <isPkceEnabled>true</isPkceEnabled>
+    <plugin>PingFederateAuthProviderPlugin</plugin>
+    <providerType>Custom</providerType>
+    <registrationHandler>PingFederatePOCRegistrationHandler</registrationHandler>
+    <requireMfa>false</requireMfa>
+    <sendAccessTokenInHeader>false</sendAccessTokenInHeader>
+    <sendClientCredentialsInHeader>false</sendClientCredentialsInHeader>
+    <sendSecretInApis>true</sendSecretInApis>
+</AuthProvider>

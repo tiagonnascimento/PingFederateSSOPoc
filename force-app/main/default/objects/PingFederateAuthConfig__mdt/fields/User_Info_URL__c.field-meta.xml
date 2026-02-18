@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>User_Info_URL__c</fullName>
+    <description>URL do UserInfo endpoint OIDC (opcional)</description>
+    <externalId>false</externalId>
+    <label>User Info URL</label>
+    <required>false</required>
+    <type>Url</type>
+</CustomField>
