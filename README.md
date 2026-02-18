@@ -93,13 +93,6 @@ O SSO foi implementado usando um **Auth Provider customizado** do Salesforce, qu
 |--------|-----------|
 | `cachePartitions/PKCEPartition.cachePartition-meta.xml` | Partição de cache **PKCEPartition** (Organization + Session). Usada pelo plugin para armazenar o `code_verifier` entre `initiate` e `handleCallback`. É obrigatória no fluxo PKCE e precisa ter capacidade alocada em **Setup > Platform Cache**. |
 
-### 5. Scripts auxiliares (opcionais)
-
-| Arquivo | Descrição |
-|--------|-----------|
-| `scripts/apex/tokenRequest.apex` | Script para testes manuais de troca de authorization code por tokens. |
-| `scripts/apex/pkceGeneratePair.apex` | Script para gerar o par code_verifier / code_challenge para testes PKCE. |
-
 ---
 
 ## Pré-requisitos para funcionamento
