@@ -91,7 +91,6 @@ O SSO foi implementado usando um **Auth Provider customizado** do Salesforce, qu
 | Arquivo | Descrição |
 |--------|-----------|
 | `objects/PingFederateAuthConfig__mdt/` | Custom Metadata Type **PingFederateAuthConfig** com campos: Consumer Key, Consumer Secret, Authorize URL, Token URL, User Info URL, Scopes, **App Key** (header customizado), Provider. |
-| `customMetadata/PingFederateAuthConfig.Ping_Federate_POC.md-meta.xml` | Registro de configuração para o provider `Ping_Federate_POC`, com as URLs do Ping Federate e o valor do `app-key`. |
 
 ### 3. Auth Provider
 
