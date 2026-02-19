@@ -13,34 +13,34 @@ O SSO foi implementado usando um **Auth Provider customizado** do Salesforce, qu
 └──────┬──────┘                    └────────┬────────┘                    └────────┬─────────┘
        │                                     │                                     │
        │  1. Acessa URL de login SSO         │                                     │
-       │     /services/auth/sso/Ping_Federate_POC                                 │
-       │────────────────────────────────────>                                     │
+       │     /services/auth/sso/Ping_Federate_POC                                  │
+       │────────────────────────────────────>                                      │
        │                                     │                                     │
-       │  2. Redirect para Authorize URL      │                                     │
+       │  2. Redirect para Authorize URL     │                                     │
        │<────────────────────────────────────│                                     │
        │                                     │                                     │
        │  3. Redireciona usuário ao IdP      │                                     │
-       │─────────────────────────────────────────────────────────────────────────>│
+       │───────────────────────────────────────-──────────────────────────────────>│
        │                                     │                                     │
        │  4. Usuário autentica no IdP        │                                     │
        │                                     │                                     │
        │  5. Redirect com authorization code │                                     │
-       │<─────────────────────────────────────────────────────────────────────────│
+       │<───────────────────────────────────────-──────────────────────────────────│
        │                                     │                                     │
        │  6. Callback para Salesforce        │                                     │
-       │────────────────────────────────────>                                     │
+       │────────────────────────────────────>                                      │
        │                                     │  7. Troca code por tokens           │
        │                                     │     (POST com app-key no header)    │
        │                                     │────────────────────────────────────>│
        │                                     │<────────────────────────────────────│
-       │                                     │  access_token, id_token, refresh     │
+       │                                     │  access_token, id_token, refresh    │
        │                                     │                                     │
        │                                     │  8. getUserInfo: extrai sub do      │
-       │                                     │     id_token (JWT)                   │
+       │                                     │     id_token (JWT)                  │
        │                                     │                                     │
        │                                     │  9. RegistrationHandler: busca User │
-       │                                     │     por FederationIdentifier = sub   │
-       │                                     │     (ou cria link se já logou antes) │
+       │                                     │     por FederationIdentifier = sub  │
+       │                                     │     (ou cria link se já logou antes)│
        │                                     │                                     │
        │  10. Login concluído – usuário logado                                     │
        │<────────────────────────────────────│                                     │
@@ -64,6 +64,18 @@ O SSO foi implementado usando um **Auth Provider customizado** do Salesforce, qu
    O token é solicitado com `Authorization: Basic base64(client_id:client_secret)` e o header customizado `app-key`.
 
 ---
+
+## Passos dados no estabelecimento da POC
+
+1. **Criação e configuração de um Auth Provider padrão OpenID Connect** – funcionou o primeiro passo de autorização, mas ao batermos no endpoint de token verificamos que o Ping Federate não estava exposto à internet.
+1. **Exposição do endpoint de token via API Gateway** – o Ping Federate passou a ser acessível pela internet através do Gateway.
+1. **Criação de um Custom Auth Provider (plugin Apex)** – o Gateway exige o header customizado app-key no token endpoint para autenticar a Salesforce, o que não é suportado pelo Auth Provider padrão OIDC. Foi necessário desenvolver um plugin Apex para incluir esse header.
+1. **Ajuste do endpoint na Salesforce para o API Gateway** – após apontar para o Gateway, surgiu o erro invalid_credentials.
+1. **Adição de Basic Authentication no header do request** – resolvido o erro de credenciais, apareceu um erro de PKCE: o Gateway não encaminhava o parâmetro code_verifier do body para o Ping Federate.
+1. **Desabilitação do PKCE** – com a desabilitação do check conseguimos obter access_token e id_token, mas o sub do id_token não correspondia ao User.FederationIdentifier no Salesforce.
+1. **Ajuste da claim sub pelo time do Ping Federate** – o IdP passou a retornar o sub correto, alinhado ao FederationIdentifier dos usuários no Salesforce.
+1. **SSO estabelecido com sucesso.**
+1. **Refinamento do Registration Handler** – na primeira autenticação, o framework não encontrava usuário por falta de Third-Party Account Link. O Registration Handler foi ajustado para, em createUser, localizar o usuário existente por FederationIdentifier e retorná-lo, permitindo que o framework criasse o link e o login funcionasse.
 
 ## Componentes gerados
 
